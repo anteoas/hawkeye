@@ -1,0 +1,9 @@
+.cpcache/
+.nrepl-port
+target/
+*.jar
+classes/
+.claude/
+.clojure-mcp/
+tmp/
+single-*/

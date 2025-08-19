@@ -1,0 +1,20 @@
+{:paths ["src" "classes"]
+ :deps {org.clojure/clojure {:mvn/version "1.12.0"}
+        net.java.dev.jna/jna {:mvn/version "5.14.0"}}
+
+ ;; Prep step to compile Java sources when library is downloaded
+ ;; Users run: clojure -X:deps prep
+ :deps/prep-lib {:ensure "classes/hawkeye/fsevents"
+                 :alias :build
+                 :fn compile-java}
+
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps {io.github.cognitect-labs/test-runner
+                      {:git/url "https://github.com/cognitect-labs/test-runner"
+                       :sha "705ad25bbf0228b1c38d0244a36001c2987d7337"}}
+         :exec-fn cognitect.test-runner.api/test
+         :jvm-opts ["--enable-native-access=ALL-UNNAMED"]}
+
+  :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.5"}}
+          :ns-default build}}}
