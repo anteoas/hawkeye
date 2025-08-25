@@ -1,8 +1,7 @@
 (ns hawkeye.fsevents.monitor
   "FSEvents integration for hawkeye."
   (:require [hawkeye.fsevents.core :as fs]
-            [clojure.java.io :as io])
-  (:import [java.io File]))
+            [clojure.java.io :as io]))
 
 (defn- normalize-event
   "Convert FSEvents event to hawkeye format.

@@ -299,9 +299,9 @@
                             (deliver monitor-promise monitor)
                             (run-loop monitor))
                           (catch Exception e
-                            (deliver monitor-promise e))))]
-    (let [result @monitor-promise]
-      (if (instance? Exception result)
-        (throw result)
-        ;; Add the future to the monitor so stop can wait for it
-        (assoc result :runner-future runner-future)))))
+                            (deliver monitor-promise e))))
+        result @monitor-promise]
+    (if (instance? Exception result)
+      (throw result)
+      ;; Add the future to the monitor so stop can wait for it
+      (assoc result :runner-future runner-future))))

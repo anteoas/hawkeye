@@ -256,7 +256,7 @@
     ;; Use compare-and-set on watching? for idempotency
     (when (compare-and-set! watching? true false)
       ;; Use swap! to get and clear the monitor atomically
-      (when-let [monitor (swap! watcher (fn [m] (when m (do nil))))]
+      (when-let [monitor (swap! watcher (fn [m] (when m nil)))]
         (when-not (= monitor :no-op)
           (try
             (let [stop-all (requiring-resolve 'hawkeye.fsevents.monitor/stop-all)]
@@ -299,7 +299,7 @@
   "Watch directories for changes and call notify-fn with event maps.
    
    Arguments:
-   - paths: Collection of directory paths to watch (recursively), or a single string path
+   - paths: Collection of directory paths to watch (recursively), or a single string path (throws on nil)
    - notify-fn: Function called with {:type :create/:modify/:delete, :file \"filename\", :path \"full/path\", :timestamp ms}
    - error-fn: Function called with exception and context map when errors occur
    
@@ -325,7 +325,10 @@
   ([paths notify-fn error-fn]
    (watch paths notify-fn error-fn {}))
   ([paths notify-fn error-fn & {:keys [mode] :or {mode :auto} :as opts}]
-   (let [paths (if (string? paths) [paths] paths)
+   (let [paths (cond
+                 (nil? paths) (throw (IllegalArgumentException. "paths cannot be nil"))
+                 (string? paths) [paths]
+                 :else paths)
          ;; Always expand paths recursively
          directories (mapcat find-all-directories paths)
          watch-keys (atom {})

@@ -55,7 +55,7 @@ Watch directories for file system changes.
 ```
 
 **Arguments:**
-- `paths` - Collection of directory paths to watch (always recursive), or a single string path
+- `paths` - Collection of directory paths to watch (always recursive), or a single string path (throws on nil)
 - `notify-fn` - Called with event map: `{:type :create/:modify/:delete, :file "name", :path "full/path", :timestamp ms}`
 - `error-fn` - Called with exception and context map when errors occur
 - `options` - Optional map with:
